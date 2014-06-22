@@ -21,7 +21,7 @@ namespace Slouch.Core
 
         private IEnumerable<IMediaSource> _sources;
         private IEnumerable<IMediaSearcher> _searchers;
-        private IMediaDownloader _downloader;
+        private GrouchDownloader _downloader;
 
         // ===========================================================================
         // = Construction
@@ -31,7 +31,8 @@ namespace Slouch.Core
         {
             _timer = new Timer(OnServerTick, null, TimeSpan.Zero, _timerInterval);
 
-            // TODO: Add these using configuration.
+            _downloader = new GrouchDownloader(null);
+
             _sources = new List<IMediaSource>
             {
                 new MovieMediaSource(),

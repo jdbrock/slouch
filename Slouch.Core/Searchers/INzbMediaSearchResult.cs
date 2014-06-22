@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Slouch.Core
 {
-    public interface IMediaDownloader
+    public interface INzbMediaSearchResult : IMediaSearchResult
     {
-        Boolean Download(IMediaSearchResult inSearchResult);
-        void PostProcess();
+        Uri NzbUri { get; }
     }
 }

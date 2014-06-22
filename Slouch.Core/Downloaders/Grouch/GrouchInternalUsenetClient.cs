@@ -9,7 +9,7 @@ using yEnc;
 
 namespace Slouch.Core
 {
-    public class GrouchInternalUsenetClient
+    public class GrouchInternalUsenetClient : IDisposable
     {
         // ===========================================================================
         // = Public Properties
@@ -84,6 +84,15 @@ namespace Slouch.Core
             _client.AuthenticateUser(UserName, Password);
 
             _initialised = true;
+        }
+
+        // ===========================================================================
+        // = IDisposable Implementation
+        // ===========================================================================
+        
+        public void Dispose()
+        {
+            _client.Close();
         }
     }
 }
