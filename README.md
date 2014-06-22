@@ -1,4 +1,7 @@
 Slouch
 ======
 
-Small potatoes.
+What is Slouch?
+----------------
+
+Something something
