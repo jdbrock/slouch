@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{77949BF1-AA04-4621-A868-E5BA49BAAD8D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Slouch.Core</RootNamespace>
+    <AssemblyName>Slouch.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Downloaders\Grouch\GrouchDownloader.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalDecoder.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalFile.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalGroup.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalNzb.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalParser.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalSegment.cs" />
+    <Compile Include="Downloaders\Grouch\GrouchInternalUsenetClient.cs" />
+    <Compile Include="Downloaders\Grouch\YEnc\CRC32.cs" />
+    <Compile Include="Downloaders\Grouch\YEnc\YEncDecoder.cs" />
+    <Compile Include="Downloaders\Grouch\YEnc\YEncEncoder.cs" />
+    <Compile Include="Downloaders\IMediaDownloader.cs" />
+    <Compile Include="Searchers\IMediaSearcher.cs" />
+    <Compile Include="Searchers\IMediaSearchResult.cs" />
+    <Compile Include="Server.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sources\IMediaItem.cs" />
+    <Compile Include="Sources\IMediaSource.cs" />
+    <Compile Include="Sources\MediaStatus.cs" />
+    <Compile Include="Sources\Movies\MovieMediaItem.cs" />
+    <Compile Include="Sources\Movies\MovieMediaSource.cs" />
+    <Compile Include="Sources\TV\TvMediaItem.cs" />
+    <Compile Include="Sources\TV\TvMediaSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Automation\" />
+    <Folder Include="Notifications\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\nntpclientlib\NntpClientLib\NntpClientLib.csproj">
+      <Project>{123ed440-def1-4d2c-aab5-08193e1efa0b}</Project>
+      <Name>NntpClientLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
