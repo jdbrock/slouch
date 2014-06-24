@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Owin.Hosting;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,10 +13,27 @@ namespace Slouch.Core
     public class Server
     {
         // ===========================================================================
+        // = Public Properties
+        // ===========================================================================
+
+        public static Server Instance
+        {
+            get
+            {
+                if (_instance == null)
+                    _instance = new Server();
+
+                return _instance;
+            }
+        }
+
+        // ===========================================================================
         // = Private Fields
         // ===========================================================================
         
         private static readonly TimeSpan _timerInterval = TimeSpan.FromMinutes(1);
+
+        private static Server _instance;
 
         private Timer _timer;
         private Boolean _timerActive;
@@ -23,21 +43,30 @@ namespace Slouch.Core
         private IEnumerable<IMediaSearcher> _searchers;
         private GrouchDownloader _downloader;
 
+        private IDisposable _webServer;
+
+        public Settings _settings;
+
         // ===========================================================================
         // = Construction
         // ===========================================================================
         
-        public Server()
+        private Server()
         {
+            LoadSettings();
+
             _timer = new Timer(OnServerTick, null, TimeSpan.Zero, _timerInterval);
 
-            _downloader = new GrouchDownloader(null);
+            _downloader = new GrouchDownloader(_settings);
 
             _sources = new List<IMediaSource>
             {
                 new MovieMediaSource(),
                 new TvMediaSource()
             };
+
+            // There doesn't appear to be a way to start and stop the web server; calling dispose doesn't seem to work.
+            _webServer = WebApp.Start<WebServer>(_settings.Uri);
         }
 
         // ===========================================================================
@@ -53,6 +82,8 @@ namespace Slouch.Core
         public void Stop()
         {
             _timerActive = false;
+
+            SaveSettings();
         }
 
         // ===========================================================================
@@ -123,6 +154,49 @@ namespace Slouch.Core
 
             // Post-process.
             _downloader.PostProcess();
+        }
+
+        private String GetSettingsPath()
+        {
+            var appDataPath  = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            var slouchPath   = Path.Combine(appDataPath, "Slouch");
+            var settingsPath = Path.Combine(slouchPath, "settings.json");
+
+            Directory.CreateDirectory(slouchPath);
+
+            return settingsPath;
+        }
+
+        private void LoadSettings()
+        {
+            var serializer = new JsonSerializer();
+            var settingsPath = GetSettingsPath();
+
+            if (!File.Exists(settingsPath))
+                _settings = new Settings();
+            else
+                using (var settingsFile = File.OpenRead(settingsPath))
+                {
+                    _settings = serializer.Deserialize<Settings>(new JsonTextReader(new StreamReader(settingsFile)));
+                }
+        }
+
+        public void SaveSettings()
+        {
+            var serializer = new JsonSerializer();
+            var settingsPath = GetSettingsPath();
+
+            using (var settingsFile = File.Create(settingsPath))
+            {
+                var streamWriter = new StreamWriter(settingsFile);
+                var jsonWriter   = new JsonTextWriter(streamWriter);
+
+                serializer.Serialize(jsonWriter, _settings);
+
+                jsonWriter.Flush();
+                streamWriter.Flush();
+                settingsFile.Flush();
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ namespace Slouch.Core
     {
         public IEnumerable<IMediaItem> GetDueItems()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            yield break;
         }
 
         public void ChangeStatus(IMediaItem inItem, MediaStatus inStatus)

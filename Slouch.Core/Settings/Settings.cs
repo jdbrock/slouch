@@ -15,5 +15,15 @@ namespace Slouch.Core
         public String ServerPassword { get; set; }
         public Int32 ServerPort { get; set; }
         public Boolean ServerUseSsl { get; set; }
+
+        public String Uri { get; set; }
+
+        public Settings()
+        {
+            // Set defaults.
+            NumberOfThreads = 30;
+            ServerUseSsl = true;
+            Uri = "http://localhost:9000";
+        }
     }
 }
