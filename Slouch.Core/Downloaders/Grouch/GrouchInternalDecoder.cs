@@ -1,5 +1,4 @@
-﻿using NntpClientLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,20 +9,14 @@ using yEnc;
 
 namespace Slouch.Core
 {
-    public class GrouchInternalDecoder : IArticleBodyProcessor, IArticleHeadersProcessor, IDisposable
+    public class GrouchInternalDecoder
     {
         // ===========================================================================
-        // = Public Properties
+        // = private Properties
         // ===========================================================================
 
-        public YEncDecoder YEncDecoder { get; private set; }
-
-        public String TargetDirectory { get; private set; }
-
-        private Boolean _started;
-        private Int64 _lastFileSize;
-        private String _lastFileName;
-        private Stream _lastHandle;
+        private YEncDecoder YEncDecoder { get; set; }
+        private String TargetDirectory { get; set; }
 
         // ===========================================================================
         // = Construction
@@ -47,108 +40,77 @@ namespace Slouch.Core
                 .Replace("/", "_");
         }
 
-        private void EnsureAllocated(String inFileName, Int64 inFileSize)
-        {
-            //var fullPath = Path.Combine(TargetDirectory, inFileName);
-
-            //if (File.Exists(fullPath))
-            //    return;
-
-            //using (var file = File.OpenWrite(fullPath))
-            //{
-            //    for (var i = 0; i < inFileSize; i++)
-            //        file.WriteByte(0);
-
-            //    file.Flush();
-            //    file.Close();
-            //}
-        }
-
         // ===========================================================================
         // = IArticleBodyProcessor Implementation
         // ===========================================================================
 
-        public void AddText(String inLine)
+        public void Process(IEnumerable<String> inLines)
         {
-            if (inLine.ToLower().Contains("=ybegin"))
+            Boolean started = false;
+            Int64 lastFileSize = 0;
+            String lastFileName = null;
+            Stream lastHandle = null;
+
+            try
             {
-                if (_lastHandle != null)
+                foreach (var line in inLines)
                 {
-                    _lastHandle.Flush();
-                    _lastHandle.Close();
-                    _lastHandle.Dispose();
+                    if (line.ToLower().Contains("=ybegin"))
+                    {
+                        if (lastHandle != null)
+                        {
+                            lastHandle.Flush();
+                            lastHandle.Close();
+                            lastHandle.Dispose();
+                        }
+
+                        lastFileSize = Int64.Parse(Regex.Match(line, "size=([0-9]*)").Groups[1].Value);
+                        lastFileName = SafeFileName(Regex.Match(line, "name=(.*)$").Groups[1].Value);
+
+                        lastHandle = File.Open(Path.Combine(TargetDirectory, lastFileName), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
+
+                        started = true;
+                        continue;
+                    }
+
+                    if (!started)
+                        continue;
+
+                    if (line.ToLower().Contains("=yend"))
+                    {
+                        lastHandle.Flush();
+                        lastHandle.Close();
+                        lastHandle.Dispose();
+                        lastHandle = null;
+                        continue;
+                    }
+
+                    if (line.ToLower().Contains("=ypart"))
+                    {
+                        var begin = Int64.Parse(Regex.Match(line, "begin=([0-9]*)").Groups[1].Value);
+                        var seek = begin - 1;
+
+                        lastHandle.Flush();
+                        lastHandle.Seek(seek, SeekOrigin.Begin);
+
+                        continue;
+                    }
+
+                    var encoding = Encoding.GetEncoding("iso-8859-1");
+                    var lineBytes = encoding.GetBytes(line);
+
+                    var destSize = YEncDecoder.GetByteCount(lineBytes, 0, lineBytes.Length, true);
+                    var dest = new Byte[destSize];
+                    var bytesWritten = YEncDecoder.GetBytes(lineBytes, 0, lineBytes.Length, dest, 0, true);
+
+                    lastHandle.Write(dest, 0, bytesWritten);
+                    lastHandle.Flush();
                 }
-
-                _lastFileSize = Int64.Parse(Regex.Match(inLine, "size=([0-9]*)").Groups[1].Value);
-                _lastFileName = SafeFileName(Regex.Match(inLine, "name=(.*)$").Groups[1].Value);
-
-                EnsureAllocated(_lastFileName, _lastFileSize);
-
-                _lastHandle = File.Open(Path.Combine(TargetDirectory, _lastFileName), FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
-
-                _started = true;
-                return;
             }
-
-            if (!_started)
-                return;
-
-            if (inLine.ToLower().Contains("=yend"))
+            finally
             {
-                _lastHandle.Flush();
-                _lastHandle.Close();
-                _lastHandle.Dispose();
-                _lastHandle = null;
-                return;
-            }
-
-            if (inLine.ToLower().Contains("=ypart"))
-            {
-                var begin = Int64.Parse(Regex.Match(inLine, "begin=([0-9]*)").Groups[1].Value);
-                var seek = begin - 1;
-
-                _lastHandle.Flush();
-                _lastHandle.Seek(seek, SeekOrigin.Begin);
-
-                return;
-            }
-
-            var encoding = Encoding.GetEncoding("iso-8859-1");
-            var line = encoding.GetBytes(inLine);
-
-            var destSize = YEncDecoder.GetByteCount(line, 0, line.Length, true);
-            var dest = new Byte[destSize];
-            var bytesWritten = YEncDecoder.GetBytes(line, 0, line.Length, dest, 0, true);
-
-            _lastHandle.Write(dest, 0, bytesWritten);
-            _lastHandle.Flush();
-        }
-
-        // ===========================================================================
-        // = IArticleHeadersProcessor Implementation
-        // ===========================================================================
-
-        public void AddHeader(String header, String value) { }
-        public void AddHeader(String headerAndValue) { }
-
-        // ===========================================================================
-        // = IDisposable Implementation
-        // ===========================================================================
-
-        public void Dispose()
-        {
-            if (_lastHandle != null)
-            {
-                _lastHandle.Flush();
-                _lastHandle.Close();
-                _lastHandle.Dispose();
+                lastHandle.TryDispose();
             }
         }
-
-        //public void Decode(IEnumerable<String> inLines)
-        //{
-        //    foreach (var line in inLines)
-        //        AddText(line);
-        //}
     }
 }

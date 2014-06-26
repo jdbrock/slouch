@@ -128,7 +128,7 @@ namespace yEnc
 			{
 				crc32Table = CRC32.BuildCRC32Table(aPolynomial);
 				if ( cacheTable )
-					cachedCRC32Tables.Add( aPolynomial, crc32Table );
+					cachedCRC32Tables[aPolynomial] = crc32Table;
 			}
 			Initialize();
 		}

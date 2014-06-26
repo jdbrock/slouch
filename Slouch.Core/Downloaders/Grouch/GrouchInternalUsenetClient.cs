@@ -1,4 +1,4 @@
-﻿using NntpClientLib;
+﻿using Paperboy;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,13 +25,12 @@ namespace Slouch.Core
         // = Private Fields
         // ===========================================================================
         
-        private Rfc977NntpClientWithExtensions _client;
-        private Boolean _initialised;
+        private UsenetClient _client;
 
         // ===========================================================================
         // = Construction
         // ===========================================================================
-        
+
         public GrouchInternalUsenetClient(String inHostName, String inUserName, String inPassword, Int32 inPort, Boolean inUseSsl)
         {
             HostName = inHostName;
@@ -40,7 +39,7 @@ namespace Slouch.Core
             UseSsl = inUseSsl;
             Port = inPort;
 
-            _client = new Rfc977NntpClientWithExtensions();
+            _client = new UsenetClient(inHostName, inPort, inUserName, inPassword, inUseSsl);
         }
 
         // ===========================================================================
@@ -49,41 +48,15 @@ namespace Slouch.Core
 
         public void DownloadArticle(String inGroup, String inMessageId, String inTargetDirectory)
         {
-            EnsureInitialised();
+            DownloadArticle(new String[] { inGroup }, inMessageId, inTargetDirectory);
+        }
 
-            var messageId = CreateValidMessageId(inMessageId);
-
+        public void DownloadArticle(IEnumerable<String> inGroups, String inMessageId, String inTargetDirectory)
+        {
             var decoder = new GrouchInternalDecoder(inTargetDirectory);
-            _client.SelectNewsgroup(inGroup);
-            _client.RetrieveArticle(messageId, decoder, decoder);
-        }
+            var data = _client.TryGetArticle(inGroups, inMessageId);
 
-        // ===========================================================================
-        // = Private Methods
-        // ===========================================================================
-        
-        private String CreateValidMessageId(String inMessageId)
-        {
-            var messageId = inMessageId;
-
-            if (!messageId.StartsWith("<"))
-                messageId = "<" + messageId;
-
-            if (!messageId.EndsWith(">"))
-                messageId = messageId + ">";
-
-            return messageId;
-        }
-
-        private void EnsureInitialised()
-        {
-            if (_initialised)
-                return;
-
-            _client.Connect(HostName, Port, UseSsl);
-            _client.AuthenticateUser(UserName, Password);
-
-            _initialised = true;
+            decoder.Process(data);
         }
 
         // ===========================================================================
@@ -92,7 +65,7 @@ namespace Slouch.Core
         
         public void Dispose()
         {
-            _client.Close();
+            _client.TryDispose();
         }
     }
 }

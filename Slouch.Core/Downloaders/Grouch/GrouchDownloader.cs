@@ -107,7 +107,11 @@ namespace Slouch.Core
                         Task.Run(() =>
                         {
                             // TODO: Try other groups if one fails.
-                            client.DownloadArticle(segment.File.Groups.First().Name, segment.MessageId, tempPath);
+                            try
+                            {
+                                client.DownloadArticle(segment.File.Groups.First().Name, segment.MessageId, tempPath);
+                            }
+                            catch { }
 
                             lock (lockObject)
                                 clients[client] = false;

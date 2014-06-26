@@ -109,6 +109,7 @@
     <Compile Include="Sources\Movies\MovieMediaSource.cs" />
     <Compile Include="Sources\TV\TvMediaItem.cs" />
     <Compile Include="Sources\TV\TvMediaSource.cs" />
+    <Compile Include="Utility\Extension Methods\DisposableExtensionMethods.cs" />
     <Compile Include="Web\NancyFx\IndexModule.cs" />
     <Compile Include="Web\SignalR\TestHub.cs" />
     <Compile Include="Web\Web API\TestController.cs" />
@@ -119,9 +120,9 @@
     <Folder Include="Notifications\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\nntpclientlib\NntpClientLib\NntpClientLib.csproj">
-      <Project>{123ed440-def1-4d2c-aab5-08193e1efa0b}</Project>
-      <Name>NntpClientLib</Name>
+    <ProjectReference Include="..\Paperboy\Paperboy.csproj">
+      <Project>{5867b937-847d-49c5-bf9f-1f8fffa2a5af}</Project>
+      <Name>Paperboy</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

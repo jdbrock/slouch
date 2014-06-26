@@ -11,14 +11,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slouch.ServerConsole", "Slo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slouch.Core.Tests", "Slouch.Core.Tests\Slouch.Core.Tests.csproj", "{56B84141-CE9E-4532-B149-E573B073B0D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NntpClientLib", "..\nntpclientlib\NntpClientLib\NntpClientLib.csproj", "{123ED440-DEF1-4D2C-AAB5-08193E1EFA0B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{7E0A231B-C6D6-44D2-9DA7-057A59FD2F33}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paperboy", "Paperboy\Paperboy.csproj", "{5867B937-847D-49C5-BF9F-1F8FFFA2A5AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +42,10 @@ Global
 		{56B84141-CE9E-4532-B149-E573B073B0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56B84141-CE9E-4532-B149-E573B073B0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56B84141-CE9E-4532-B149-E573B073B0D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{123ED440-DEF1-4D2C-AAB5-08193E1EFA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{123ED440-DEF1-4D2C-AAB5-08193E1EFA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{123ED440-DEF1-4D2C-AAB5-08193E1EFA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{123ED440-DEF1-4D2C-AAB5-08193E1EFA0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5867B937-847D-49C5-BF9F-1F8FFFA2A5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5867B937-847D-49C5-BF9F-1F8FFFA2A5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5867B937-847D-49C5-BF9F-1F8FFFA2A5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5867B937-847D-49C5-BF9F-1F8FFFA2A5AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -44,7 +44,7 @@ namespace Slouch.Core.Tests
                 ServerPassword = settingsArray[1],
                 ServerHostName = settingsArray[2],
                 ServerPort = Int32.Parse(settingsArray[3]),
-                ServerUseSsl = false,
+                ServerUseSsl = true,
                 NumberOfThreads = 30
             };
 
