@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Paperboy</id>
+        <version>0.1-pre</version>
+        <title>Paperboy</title>
+        <authors>Joe Brock</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Tiny NNTP/Usenet client which (only) supports grabbing articles.</description>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="bin\Paperboy.dll" target="lib\Paperboy.dll" />
+    </files>
+</package>
