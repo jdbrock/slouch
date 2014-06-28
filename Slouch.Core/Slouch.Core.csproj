@@ -63,6 +63,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Paperboy, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Paperboy.0.1-pre\lib\net40\Paperboy.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net.Http" />
@@ -118,12 +122,6 @@
   <ItemGroup>
     <Folder Include="Automation\" />
     <Folder Include="Notifications\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Paperboy\Paperboy.csproj">
-      <Project>{5867b937-847d-49c5-bf9f-1f8fffa2a5af}</Project>
-      <Name>Paperboy</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
