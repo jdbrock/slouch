@@ -27,23 +27,6 @@ namespace Slouch.Console
             // Stop server.
             System.Console.WriteLine("Stopping server...");
             Server.Instance.Stop();
-
-            //var settingsArray = File.ReadAllLines(@"C:\temp\usenet.txt");
-            //var settings = new Settings
-            //{
-            //    ServerUserName = settingsArray[0],
-            //    ServerPassword = settingsArray[1],
-            //    ServerHostName = settingsArray[2],
-            //    ServerPort = Int32.Parse(settingsArray[3]),
-            //    ServerUseSsl = true,
-            //    NumberOfThreads = 30
-            //};
-
-            //var xml = XDocument.Load("http://slouch.nae.io/test.xml");
-            //var nzb = GrouchInternalNzb.FromXml(xml);
-
-            //var downloader = new GrouchDownloader(settings);
-            //downloader.Download(nzb);
         }
     }
 }
