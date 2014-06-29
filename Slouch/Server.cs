@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class Server
     {

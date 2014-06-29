@@ -6,8 +6,8 @@
     <ProjectGuid>{56B84141-CE9E-4532-B149-E573B073B0D9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Slouch.Core.Tests</RootNamespace>
-    <AssemblyName>Slouch.Core.Tests</AssemblyName>
+    <RootNamespace>Slouch.Tests</RootNamespace>
+    <AssemblyName>Slouch.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -59,6 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Slouch\Slouch.csproj">
+      <Project>{e057cc6e-7f29-476f-a867-c320dd7dfd76}</Project>
+      <Name>Slouch</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

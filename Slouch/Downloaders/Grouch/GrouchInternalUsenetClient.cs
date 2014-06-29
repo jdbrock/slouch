@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using yEnc;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class GrouchInternalUsenetClient : IDisposable
     {

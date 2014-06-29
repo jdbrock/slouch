@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Slouch.Core;
+using Slouch;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Xml.Linq;
 
-namespace Slouch.Core.Tests
+namespace Slouch.Tests
 {
     [TestClass()]
     public class GrouchDownloaderTests

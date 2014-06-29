@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Slouch.Core
+namespace Slouch
 {
     [HubName("hellohub")]
     public class MyHub : Hub

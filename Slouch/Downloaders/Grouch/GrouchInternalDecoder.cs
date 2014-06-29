@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using yEnc;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class GrouchInternalDecoder
     {

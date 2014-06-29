@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class TestController : ApiController
     {

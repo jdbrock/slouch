@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class GrouchDownloader
     {

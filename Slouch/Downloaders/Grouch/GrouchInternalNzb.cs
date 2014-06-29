@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Slouch.Core
+namespace Slouch
 {
     public class GrouchInternalNzb
     {
