@@ -1,0 +1,82 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Slouch.Core.IndexModel>
+
+@{
+    Layout = "Shared/_Layout.cshtml";   
+}
+
+<div>
+    <div id="logo">
+        @*<img src="Content/i/slouch.svg" />*@
+        <h1>Slouch</h1>
+        @*<h2 class="tagline">Sit back and relax.</h2>*@
+    </div>
+
+    <div id="nav">
+        <a href="#add">Add</a>
+        <a href="#downloading">Downloading</a>
+        <a href="#arrived">Just Arrived</a>
+        <a href="#looking">Still Looking</a>
+        <a href="#tracked">Tracked Series</a>
+        <a href="#configuration">Configuration</a>
+    </div>
+
+    <div id="add">
+        <div id="add-movies">
+            <h2>Add Movies</h2>
+
+            <form>
+                <input name="add-movie-name" type="text" />
+                <input name="add-movie-submit" type="submit" value="Search" />
+            </form>
+        </div>
+
+        <div id="add-series">
+            <h2>Add Series</h2>
+
+            <form>
+                <input name="add-series-name" type="text" />
+                <input name="add-series-submit" type="submit" value="Search" />
+            </form>
+        </div>
+    </div>
+
+    <div id="downloading">
+        <h2>Downloading</h2>
+
+        <div class="progress-wrapper">
+            <progress class="progress-child" max="100" value="30"></progress>
+            <div class="progress-label">Die Hard with a Vengeance</div>
+        </div>
+
+        <div class="progress-wrapper">
+            <progress class="progress-child" max="100" value="0"></progress>
+            <div class="progress-label">Toy Story 2</div>
+        </div>
+
+        <div class="progress-wrapper">
+            <progress class="progress-child" max="100" value="0"></progress>
+            <div class="progress-label">Toy Story 3</div>
+        </div>
+
+        <div class="progress-wrapper">
+            <progress class="progress-child" max="100" value="0"></progress>
+            <div class="progress-label">Das Boot</div>
+        </div>
+    </div>
+
+    <div id="arrived">
+        <h2>Just Arrived</h2>
+    </div>
+
+    <div id="looking">
+        <h2>Still Looking</h2>
+    </div>
+
+    <div id="tracked">
+        <h2>Tracked Series</h2>
+    </div>
+
+    <div id="configuration">
+        <h2>Configuration</h2>
+    </div>
+</div>

@@ -1,0 +1,156 @@
+﻿
+/* Global */
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #7f8c8d;
+    -webkit-font-smoothing: antialiased;
+    margin: 50px;
+    margin-top: 55px;
+}
+
+h1, h2, h3, h4, h5, h6, span, div { 
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    margin-bottom: 20px;
+}
+
+form, input {
+    margin: 0;
+}
+
+input {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+
+    background: #f8f8f8;
+    color: #666;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+
+    line-height: 1.2em;
+    font-size: 1.2em;
+    
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+    width: 300px;
+}
+
+input[type=button], input[type=submit] {
+    width: 100px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.progress-wrapper {
+    width: 431px;
+    height: 45px;
+}
+
+.progress-child {
+    position: absolute;
+}
+
+.progress-label {
+    position: relative;
+    vertical-align: middle;
+    left: 13px;
+    top: 11px;
+    color: #D6D6D6;
+}
+
+progress[value] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 431px;
+    height: 45px;
+}
+
+progress::-webkit-progress-bar {
+    background: #f8f8f8;
+    border: 1px solid #eeeeee;
+    border-radius: 4px;
+    /*width: 405px;*/
+}
+
+progress::-webkit-progress-value {
+    border-radius: 3px;
+    background: #27ae60;
+}
+
+/* Scoped / Classes / IDs */
+
+#logo > h1 {
+    font-size: 48pt;
+    line-height: 30pt;
+    color: #2980b9;
+    /*margin-bottom: 30px;*/
+    margin-bottom: 40px;
+}
+
+/*#logo > .tagline {
+    color: #9f9f9f;
+}*/
+
+#add-movies > h2 {
+    color: #27ae60;
+}
+
+#add-series > h2 {
+    color: #16a085;
+}
+
+#add-movies input,
+#add-series input {
+    margin-right: 5px;
+}
+
+#downloading > h2 {
+    color: #16a085;
+}
+
+#arrived > h2 {
+    color: #8e44ad;
+}
+
+#looking > h2 {
+    color: #c0392b;
+}
+
+#tracked > h2 {
+    color: #d35400;
+}
+
+#configuration > h2 {
+    color: #e67e22;
+}
+
+#nav {
+    margin-top: 30px;
+    margin-bottom: 30px;
+
+    display: none;
+}
+
+#nav > a, #nav > a:hover, #nav > a:active, #nav > a:visited {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+
+    margin-right: 7px;
+
+    border: 1px solid rgba(149, 165, 166, 0.45);
+
+    color: #95a5a6;
+    text-decoration: none;
+}
+
+#nav > a:hover {
+    color: #e67e22;
+    border: 1px solid rgba(230, 126, 34, 0.45);
+}

@@ -58,12 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Slouch.Core\Slouch.Core.csproj">
-      <Project>{77949BF1-AA04-4621-A868-E5BA49BAAD8D}</Project>
-      <Name>Slouch.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
   <Choose>
