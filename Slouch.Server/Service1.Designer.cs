@@ -1,4 +1,4 @@
-﻿namespace Slouch.Server
+﻿namespace Slouch.Service
 {
     partial class Service1
     {

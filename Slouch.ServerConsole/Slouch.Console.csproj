@@ -7,8 +7,8 @@
     <ProjectGuid>{E057CC6E-7F29-476F-A867-C320DD7DFD76}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Slouch.ServerConsole</RootNamespace>
-    <AssemblyName>Slouch.ServerConsole</AssemblyName>
+    <RootNamespace>Slouch.Console</RootNamespace>
+    <AssemblyName>Slouch.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

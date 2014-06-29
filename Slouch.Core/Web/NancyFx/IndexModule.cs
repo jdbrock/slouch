@@ -11,10 +11,7 @@ namespace Slouch.Core
     {
         public IndexModule()
         {
-            Get["/"] = x =>
-            {
-                return "Slouch!";
-            };
+            Get["/"] = _ => View["Index", new IndexModel()];
         }
     }
 }

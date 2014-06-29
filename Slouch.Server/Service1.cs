@@ -8,7 +8,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Slouch.Server
+namespace Slouch.Service
 {
     public partial class Service1 : ServiceBase
     {

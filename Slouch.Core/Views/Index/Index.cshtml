@@ -1,0 +1,27 @@
+﻿@inherits Nancy.ViewEngines.Razor.NancyRazorViewBase<Slouch.Core.IndexModel>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Id:</td>
+            <td>@Model.Id</td>
+        </tr>
+        <tr>
+            <td>Title:</td>
+            <td>@Model.Title</td>
+        </tr>
+        <tr>
+            <td>Content:</td>
+            <td>@Model.Content</td>
+        </tr>
+        <tr>
+            <td>Tags:</td>
+            <td>@string.Join(", ", Model.Tags)</td>
+        </tr>
+    </table>
+</body>
+</html>

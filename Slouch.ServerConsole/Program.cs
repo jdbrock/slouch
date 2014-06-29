@@ -8,24 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Slouch.ServerConsole
+namespace Slouch.Console
 {
     public class Program
     {
         public static void Main(String[] args)
         {
             // Start server.
-            Console.WriteLine("Starting server...");
+            System.Console.WriteLine("Starting server...");
             Server.Instance.Start();
-            Console.WriteLine("Server started. Press escape to exit.");
+            System.Console.WriteLine("Server started. Press escape to exit.");
 
             Process.Start(Server.Instance._settings.Uri);
 
             // Wait until the user hits escape.
-            while (Console.ReadKey().Key != ConsoleKey.Escape) { }
+            while (System.Console.ReadKey().Key != ConsoleKey.Escape) { }
 
             // Stop server.
-            Console.WriteLine("Stopping server...");
+            System.Console.WriteLine("Stopping server...");
             Server.Instance.Stop();
 
             //var settingsArray = File.ReadAllLines(@"C:\temp\usenet.txt");
