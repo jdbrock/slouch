@@ -1,6 +1,7 @@
 ﻿using Microsoft.Owin.Hosting;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Slouch
 {
-    public class Server
+    public class Server : IDownloadProgressHost
     {
         // ===========================================================================
         // = Public Properties
@@ -27,17 +28,15 @@ namespace Slouch
             }
         }
 
+        public Status Status { get; set; }
+
         // ===========================================================================
         // = Private Fields
         // ===========================================================================
         
-        private static readonly TimeSpan _timerInterval = TimeSpan.FromMinutes(1);
+        private static readonly TimeSpan _timerInterval = TimeSpan.FromSeconds(10);
 
         private static Server _instance;
-
-        private Timer _timer;
-        private Boolean _timerActive;
-        private Boolean _timerCallbackRunning;
 
         private IEnumerable<IMediaSource> _sources;
         private IEnumerable<IMediaSearcher> _searchers;
@@ -45,7 +44,11 @@ namespace Slouch
 
         private IDisposable _webServer;
 
-        public Settings _settings;
+        private ConcurrentQueue<IMediaSearchResult> _downloadQueue;
+        private Task _downloadTask;
+        private Task _scheduleTask;
+
+        internal Settings _settings;
 
         // ===========================================================================
         // = Construction
@@ -55,8 +58,6 @@ namespace Slouch
         {
             LoadSettings();
 
-            _timer = new Timer(OnServerTick, null, TimeSpan.Zero, _timerInterval);
-
             _downloader = new GrouchDownloader(_settings);
 
             _sources = new List<IMediaSource>
@@ -64,6 +65,17 @@ namespace Slouch
                 new MovieMediaSource(),
                 new TvMediaSource()
             };
+
+            _searchers = new List<IMediaSearcher>
+            {
+                new DummyMediaSearcher()
+            };
+
+            Status = new Status();
+
+            _downloadQueue = new ConcurrentQueue<IMediaSearchResult>();
+            _downloadTask = new Task(DownloadTask);
+            _scheduleTask = new Task(ScheduleTask);
 
             // There doesn't appear to be a way to start and stop the web server; calling dispose doesn't seem to work.
             _webServer = WebApp.Start<WebServer>(_settings.Uri);
@@ -75,14 +87,12 @@ namespace Slouch
         
         public void Start()
         {
-            _timerActive = true;
-            _timer.Change(TimeSpan.Zero, _timerInterval);
+            _downloadTask.Start();
+            _scheduleTask.Start();
         }
 
         public void Stop()
         {
-            _timerActive = false;
-
             SaveSettings();
         }
 
@@ -90,26 +100,20 @@ namespace Slouch
         // = Private Methods
         // ===========================================================================
 
-        private void OnServerTick(Object inState)
+        private void DownloadTask()
         {
-            if (_timerActive)
-                return;
-
-            if (_timerCallbackRunning)
-                return;
-
-            try
+            while (true)
             {
-                _timerCallbackRunning = true;
-                OnServerTickCore();
-            }
-            finally
-            {
-                _timerCallbackRunning = false;
+                IMediaSearchResult x;
+
+                if (_downloadQueue.TryDequeue(out x))
+                    _downloader.Download(x, this);
+
+                Thread.Sleep(100);
             }
         }
 
-        private void OnServerTickCore()
+        private void ScheduleTask()
         {
             // Find everything that is scheduled for download.
             
@@ -130,30 +134,54 @@ namespace Slouch
             //  4) Transactions that have been completed will have their item's status updated, the item moved to the correct
             //     location on disk for that media source (e.g. TV/movie libraries) and notifications will be generated.
 
-            foreach (var source in _sources)
-                foreach (var item in source.GetDueItems())
-                {
-                    // Search for the item.
-                    var results = _searchers
-                        .Where(X => X.IsCompatibleWith(item))
-                        .Select(X => X.Search(item))
-                        .AsParallel()
-                        .ToList();
+            while (true)
+            {
+                foreach (var source in _sources)
+                    foreach (var item in source.GetDueItems())
+                    {
+                        Console.WriteLine(String.Format("Due: {0}", item.DisplayName));
+                        Console.WriteLine("Searching...");
 
-                    // Did we find anything?
-                    if (results.Count == 0 || !results.Any(X => X.IsSuccess))
-                        continue;
+                        // Search for the item.
+                        var results = _searchers
+                            .Where(X => X.IsCompatibleWith(item))
+                            .Select(X => X.Search(item))
+                            .AsParallel()
+                            .ToList();
 
-                    // Pick the the best result (TODO).
-                    var best = results.First();
+                        Console.WriteLine(String.Format("Found {0} results.", results.Count));
 
-                    // Download it.
-                    if (_downloader.Download(best))
-                        source.ChangeStatus(item, MediaStatus.Incoming);
-                }
+                        // Did we find anything?
+                        if (results.Count == 0 || !results.Any(X => X.IsSuccess))
+                            continue;
 
-            // Post-process.
-            _downloader.PostProcess();
+                        // Pick the the best result (TODO).
+                        var best = results.First();
+
+                        // Add to download queue.
+                        QueueForDownload(best);
+
+                        Console.WriteLine("Added to download queue.");
+                    }
+
+                // Post-process.
+                _downloader.PostProcess();
+
+                Console.WriteLine();
+                Thread.Sleep(TimeSpan.FromSeconds(5));
+            }
+        }
+
+        private void QueueForDownload(IMediaSearchResult inResult)
+        {
+            Status.Downloads.Add(new DownloadStatus
+            {
+                Id = inResult.Id,
+                Media = inResult.Item,
+                CompletionPercentage = 0
+            });
+
+            _downloadQueue.Enqueue(inResult);
         }
 
         private String GetSettingsPath()
@@ -197,6 +225,16 @@ namespace Slouch
                 streamWriter.Flush();
                 settingsFile.Flush();
             }
+        }
+
+        // ===========================================================================
+        // = IDownloadProgressHost Implementation
+        // ===========================================================================
+
+        void IDownloadProgressHost.Update(Guid inId, Int32 inCompletionPercentage)
+        {
+            // TODO: This lookup will be far too slow.
+            Status.Downloads.First(X => X.Id == inId).CompletionPercentage = inCompletionPercentage;
         }
     }
 }

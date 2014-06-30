@@ -12,6 +12,7 @@ namespace Slouch
         public IndexModule()
         {
             Get["/"] = _ => View["Index", new IndexModel()];
+            Get["/test"] = _ => View["Test"];
         }
     }
 }

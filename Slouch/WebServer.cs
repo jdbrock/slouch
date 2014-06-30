@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNet.SignalR;
+using Nancy.TinyIoc;
+using Nancy.ViewEngines.Razor;
 using Owin;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,7 @@ namespace Slouch
         {
             // Configure Web API for self-host. 
             var config = new HttpConfiguration();
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

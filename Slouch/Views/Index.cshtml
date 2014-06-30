@@ -4,7 +4,19 @@
     Layout = "Shared/_Layout.cshtml";   
 }
 
-<div>
+<div ng-controller="mainController">
+
+    @*{{ stuff }}*@
+
+    @*<ul class="menu">
+        <li><a href="#/view1">view1</a></li>
+        <li><a href="#/view2">view2</a></li>
+    </ul>
+
+    <div ng-view></div>
+
+    <div>Angular seed app: v<span app-version></span></div>*@
+
     <div id="logo">
         @*<img src="Content/i/slouch.svg" />*@
         <h1>Slouch</h1>
@@ -43,24 +55,9 @@
     <div id="downloading">
         <h2>Downloading</h2>
 
-        <div class="progress-wrapper">
-            <progress class="progress-child" max="100" value="30"></progress>
-            <div class="progress-label">Die Hard with a Vengeance</div>
-        </div>
-
-        <div class="progress-wrapper">
-            <progress class="progress-child" max="100" value="0"></progress>
-            <div class="progress-label">Toy Story 2</div>
-        </div>
-
-        <div class="progress-wrapper">
-            <progress class="progress-child" max="100" value="0"></progress>
-            <div class="progress-label">Toy Story 3</div>
-        </div>
-
-        <div class="progress-wrapper">
-            <progress class="progress-child" max="100" value="0"></progress>
-            <div class="progress-label">Das Boot</div>
+        <div ng-repeat="download in downloads" class="progress-wrapper">
+            <progress class="progress-child" max="100" value="{{download.CompletionPercentage}}"></progress>
+            <div class="progress-label">{{download.Media.DisplayName}}</div>
         </div>
     </div>
 

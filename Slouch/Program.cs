@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Slouch.Console
+namespace Slouch
 {
     public class Program
     {
@@ -17,6 +17,7 @@ namespace Slouch.Console
             System.Console.WriteLine("Starting server...");
             Server.Instance.Start();
             System.Console.WriteLine("Server started. Press escape to exit.");
+            System.Console.WriteLine();
 
             Process.Start(Server.Instance._settings.Uri);
 

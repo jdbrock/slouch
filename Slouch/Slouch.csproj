@@ -7,8 +7,8 @@
     <ProjectGuid>{E057CC6E-7F29-476F-A867-C320DD7DFD76}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Slouch.Console</RootNamespace>
-    <AssemblyName>Slouch.Console</AssemblyName>
+    <RootNamespace>Slouch</RootNamespace>
+    <AssemblyName>Slouch</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -109,11 +109,15 @@
     <Compile Include="Downloaders\Grouch\GrouchInternalParser.cs" />
     <Compile Include="Downloaders\Grouch\GrouchInternalSegment.cs" />
     <Compile Include="Downloaders\Grouch\GrouchInternalUsenetClient.cs" />
+    <Compile Include="Downloaders\IDownloadProgressHost.cs" />
     <Compile Include="Downloaders\Grouch\YEnc\CRC32.cs" />
     <Compile Include="Downloaders\Grouch\YEnc\YEncDecoder.cs" />
     <Compile Include="Downloaders\Grouch\YEnc\YEncEncoder.cs" />
+    <Compile Include="Models\DownloadStatus.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Searchers\DummyMediaSearcher.cs" />
     <Compile Include="Searchers\IMediaSearcher.cs" />
     <Compile Include="Searchers\IMediaSearchResult.cs" />
     <Compile Include="Searchers\INzbMediaSearchResult.cs" />
@@ -124,13 +128,16 @@
     <Compile Include="Sources\MediaStatus.cs" />
     <Compile Include="Sources\Movies\MovieMediaItem.cs" />
     <Compile Include="Sources\Movies\MovieMediaSource.cs" />
+    <Compile Include="Sources\TV\TvEpisode.cs" />
     <Compile Include="Sources\TV\TvMediaItem.cs" />
     <Compile Include="Sources\TV\TvMediaSource.cs" />
+    <Compile Include="Sources\TV\TvSeason.cs" />
+    <Compile Include="Sources\TV\TvSeries.cs" />
     <Compile Include="Utility\Extension Methods\DisposableExtensionMethods.cs" />
     <Compile Include="Controllers\Nancy\IndexModel.cs" />
     <Compile Include="Controllers\Nancy\IndexModule.cs" />
-    <Compile Include="Controllers\SignalR\TestHub.cs" />
-    <Compile Include="Controllers\Web API\TestController.cs" />
+    <Compile Include="Controllers\SignalR\StatusHub.cs" />
+    <Compile Include="Controllers\Web API\StatusController.cs" />
     <Compile Include="WebServer.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +148,6 @@
     <None Include="Content\bootstrap.css.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="Content\fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <None Include="packages.config" />
     <Content Include="Content\app.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -160,962 +164,964 @@
     <Content Include="Content\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\i\slouch.svg">
+    <Content Include="Content\img\slouch.svg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-animate.js">
+    <Content Include="Content\js\app\services.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-animate.min.js">
+    <Content Include="Content\js\lib\angular-animate.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-cookies.js">
+    <Content Include="Content\js\lib\angular-animate.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-cookies.min.js">
+    <Content Include="Content\js\lib\angular-cookies.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-csp.css">
+    <Content Include="Content\js\lib\angular-cookies.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-loader.js">
+    <Content Include="Content\js\lib\angular-csp.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-loader.min.js">
+    <Content Include="Content\js\lib\angular-loader.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-mocks.js">
+    <Content Include="Content\js\lib\angular-loader.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-resource.js">
+    <Content Include="Content\js\lib\angular-mocks.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-resource.min.js">
+    <Content Include="Content\js\lib\angular-resource.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-route.js">
+    <Content Include="Content\js\lib\angular-resource.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-route.min.js">
+    <Content Include="Content\js\lib\angular-route.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-sanitize.js">
+    <Content Include="Content\js\lib\angular-route.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-sanitize.min.js">
+    <Content Include="Content\js\lib\angular-sanitize.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-scenario.js">
+    <Content Include="Content\js\lib\angular-sanitize.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-touch.js">
+    <Content Include="Content\js\lib\angular-scenario.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular-touch.min.js">
+    <Content Include="Content\js\lib\angular-touch.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular.js">
+    <Content Include="Content\js\lib\angular-touch.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\angular.min.js">
+    <Content Include="Content\js\lib\angular.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_af-na.js">
+    <Content Include="Content\js\lib\angular.min.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_af-za.js">
+    <Content Include="Content\js\app\controllers.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_af.js">
+    <Content Include="Content\js\app\directives.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_am-et.js">
+    <Content Include="Content\js\app\filters.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_am.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_af-na.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-001.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_af-za.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-ae.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_af.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-bh.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_am-et.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-dz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_am.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-eg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-001.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-iq.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-ae.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-jo.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-bh.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-kw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-dz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-lb.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-eg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-ly.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-iq.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-ma.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-jo.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-om.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-kw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-qa.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-lb.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-sa.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-ly.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-sd.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-ma.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-sy.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-om.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-tn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-qa.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar-ye.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-sa.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ar.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-sd.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_bg-bg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-sy.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_bg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-tn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_bn-bd.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar-ye.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_bn-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ar.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_bn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_bg-bg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ca-ad.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_bg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ca-es.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_bn-bd.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ca.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_bn-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_cs-cz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_bn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_cs.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ca-ad.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_da-dk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ca-es.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_da.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ca.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-at.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_cs-cz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-be.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_cs.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-ch.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_da-dk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-de.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_da.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-li.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-at.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de-lu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-be.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_de.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-ch.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_el-cy.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-de.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_el-gr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-li.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_el.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de-lu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-as.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_de.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-au.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_el-cy.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-bb.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_el-gr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-be.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_el.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-bm.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-as.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-bw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-au.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-bz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-bb.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-ca.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-be.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-dsrt-us.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-bm.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-dsrt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-bw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-fm.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-bz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-gb.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-ca.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-gu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-dsrt-us.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-gy.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-dsrt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-hk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-fm.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-ie.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-gb.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-gu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-iso.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-gy.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-jm.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-hk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-mh.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-ie.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-mp.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-mt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-iso.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-mu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-jm.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-na.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-mh.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-nz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-mp.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-ph.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-mt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-pk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-mu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-pr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-na.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-pw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-nz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-sg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-ph.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-tc.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-pk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-tt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-pr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-um.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-pw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-us.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-sg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-vg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-tc.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-vi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-tt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-za.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-um.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en-zw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-us.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_en.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-vg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-419.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-vi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ar.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-za.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-bo.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en-zw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-cl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_en.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-co.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-419.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-cr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ar.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-do.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-bo.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ea.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-cl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ec.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-co.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-es.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-cr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-gq.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-do.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-gt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ea.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-hn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ec.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ic.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-es.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-mx.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-gq.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ni.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-gt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-pa.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-hn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-pe.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ic.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-pr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-mx.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-py.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ni.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-sv.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-pa.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-us.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-pe.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-uy.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-pr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es-ve.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-py.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_es.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-sv.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_et-ee.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-us.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_et.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-uy.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_eu-es.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es-ve.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_eu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_es.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fa-af.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_et-ee.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fa-ir.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_et.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fa.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_eu-es.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fi-fi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_eu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fa-af.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fil-ph.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fa-ir.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fil.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fa.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-be.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fi-fi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-bf.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-bi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fil-ph.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-bj.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fil.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-bl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-be.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ca.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-bf.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-cd.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-bi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-cf.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-bj.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-cg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-bl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ch.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ca.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ci.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-cd.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-cm.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-cf.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-dj.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-cg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-fr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ch.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ga.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ci.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-gf.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-cm.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-gn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-dj.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-gp.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-fr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-gq.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ga.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-km.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-gf.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-lu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-gn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-mc.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-gp.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-mf.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-gq.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-mg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-km.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ml.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-lu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-mq.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-mc.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-ne.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-mf.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-re.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-mg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-rw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ml.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-sn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-mq.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-td.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-ne.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-tg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-re.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr-yt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-rw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_fr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-sn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gl-es.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-td.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-tg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gsw-ch.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr-yt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gsw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_fr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gu-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gl-es.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_gu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_he-il.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gsw-ch.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_he.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gsw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hi-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gu-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_gu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hr-hr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_he-il.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_he.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hu-hu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hi-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_hu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_id-id.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hr-hr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_id.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hu-hu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_is-is.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_hu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_is.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_id-id.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_it-ch.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_id.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_it-it.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_it-sm.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_is-is.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_it.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_is.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_iw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_it-ch.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ja-jp.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_it-it.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ja.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_it-sm.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_kn-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_it.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_kn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_iw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ko-kr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ja-jp.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ko.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ja.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ln-cd.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_kn-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ln-cg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_kn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ln.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ko-kr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_lt-lt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ko.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_lt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ln-cd.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_lv-lv.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ln-cg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_lv.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ln.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ml-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_lt-lt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ml.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_lt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_mr-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_lv-lv.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_mr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_lv.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ms-bn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ml-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ms-my.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ml.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ms.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_mr-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_mt-mt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_mr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_mt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ms-bn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl-aw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ms-my.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl-be.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ms.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl-cw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_mt-mt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl-nl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_mt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl-sx.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl-aw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_nl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl-be.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_no.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl-cw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_or-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl-nl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_or.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl-sx.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pl-pl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_nl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_no.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-ao.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_or-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-br.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_or.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-gw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pl-pl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-mz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-pt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-ao.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt-st.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-br.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_pt.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-gw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ro-md.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-mz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ro-ro.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-pt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ro.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt-st.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ru-md.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_pt.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ru-ru.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ro-md.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ru-ua.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ro-ro.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ru.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ro.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sk-sk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ru-md.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ru-ru.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sl-si.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ru-ua.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ru.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sq-al.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sk-sk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sq.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-cyrl-ba.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sl-si.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-cyrl-me.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-cyrl-rs.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sq-al.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-cyrl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sq.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-latn-ba.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-cyrl-ba.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-latn-me.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-cyrl-me.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-latn-rs.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-cyrl-rs.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr-latn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-cyrl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-latn-ba.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sv-fi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-latn-me.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sv-se.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-latn-rs.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sv.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr-latn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sw-ke.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sw-tz.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sv-fi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_sw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sv-se.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ta-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sv.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ta-lk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sw-ke.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ta.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sw-tz.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_te-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_sw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_te.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ta-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_th-th.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ta-lk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_th.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ta.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_tl.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_te-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_tr-tr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_te.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_tr.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_th-th.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_uk-ua.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_th.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_uk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_tl.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ur-in.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_tr-tr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ur-pk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_tr.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_ur.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_uk-ua.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_vi-vn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_uk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_vi.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ur-in.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-cn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ur-pk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hans-cn.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_ur.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hans-hk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_vi-vn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hans-mo.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_vi.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hans-sg.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-cn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hans.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hans-cn.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hant-hk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hans-hk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hant-mo.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hans-mo.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hant-tw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hans-sg.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hant.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hans.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-hk.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hant-hk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh-tw.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hant-mo.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zh.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hant-tw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zu-za.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hant.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\i18n\angular-locale_zu.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-hk.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Content\js\bootstrap.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh-tw.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\bootstrap.min.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zh.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\jquery-1.9.0.intellisense.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zu-za.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\jquery-1.9.0.js">
+    <Content Include="Content\js\lib\i18n\angular-locale_zu.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\js\jquery-1.9.0.min.js">
+    <Content Include="Content\partials\partial2.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Views\Index.cshtml">
+    <Content Include="Content\partials\partial1.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Content\js\angular-animate.min.js.map">
+    <None Include="Views\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-cookies.min.js.map">
+    <None Include="Content\js\lib\angular-animate.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-loader.min.js.map">
+    <None Include="Content\js\lib\angular-cookies.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-resource.min.js.map">
+    <None Include="Content\js\lib\angular-loader.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-route.min.js.map">
+    <None Include="Content\js\lib\angular-resource.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-sanitize.min.js.map">
+    <None Include="Content\js\lib\angular-route.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular-touch.min.js.map">
+    <None Include="Content\js\lib\angular-sanitize.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\angular.min.js.map">
+    <None Include="Content\js\lib\angular-touch.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\errors.json">
+    <None Include="Content\js\lib\angular.min.js.map">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Content\js\version.json">
+    <None Include="Content\js\lib\errors.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Content\js\lib\version.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Views\Shared\_Layout.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Content\js\jquery-1.9.0.min.map">
+    <Content Include="Views\Test.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\js\app.js">
+    <Content Include="Content\js\app\app.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

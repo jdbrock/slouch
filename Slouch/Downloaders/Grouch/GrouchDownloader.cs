@@ -39,14 +39,14 @@ namespace Slouch
         // = Public Methods
         // ===========================================================================
         
-        public Boolean Download(IMediaSearchResult inSearchResult)
+        public Boolean Download(IMediaSearchResult inSearchResult, IDownloadProgressHost inProgressHost)
         {
             if (inSearchResult is INzbMediaSearchResult)
             {
                 var doc = XDocument.Load(((INzbMediaSearchResult)inSearchResult).NzbUri.OriginalString);
                 var nzb = GrouchInternalNzb.FromXml(doc);
 
-                Download(nzb);
+                Download(nzb, inSearchResult.Id, inProgressHost);
 
                 return true;
             }
@@ -54,7 +54,7 @@ namespace Slouch
                 throw new NotImplementedException();
         }
 
-        public void Download(GrouchInternalNzb inNzb)
+        private void Download(GrouchInternalNzb inNzb, Guid inId, IDownloadProgressHost inProgressHost)
         {
             var tempPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Directory.CreateDirectory(tempPath);
@@ -63,11 +63,16 @@ namespace Slouch
                 .Select(X => _clientFactory())
                 .ToDictionary(X => X, X => false);
 
+            var lastProgressUpdate = DateTime.Now;
+
             try
             {
                 var lockObject = new Object();
 
                 var segments = inNzb.Files.SelectMany(X => X.Segments).ToList();
+
+                var initialSegmentCount = segments.Count;
+                var currentSegmentCount = segments.Count;
 
                 while (true)
                 {
@@ -91,6 +96,8 @@ namespace Slouch
 
                             segment = segments.First();
                             segments.RemoveAt(0);
+
+                            currentSegmentCount = segments.Count;
                         }
                     }
 
@@ -116,6 +123,14 @@ namespace Slouch
                             lock (lockObject)
                                 clients[client] = false;
                         });
+                    }
+
+                    if (lastProgressUpdate.AddSeconds(1) < DateTime.Now)
+                    {
+                        var completionPercentage = 100 - (Int32)((((Double)currentSegmentCount) / initialSegmentCount) * 100);
+                        inProgressHost.Update(inId, completionPercentage);
+
+                        lastProgressUpdate = DateTime.Now;
                     }
 
                     // If there are no busy clients and the queue is empty, we're done.

@@ -8,6 +8,8 @@ namespace Slouch
 {
     public interface IMediaSearchResult
     {
+        Guid Id { get; }
+        IMediaItem Item { get; }
         Boolean IsSuccess { get; }
     }
 }
