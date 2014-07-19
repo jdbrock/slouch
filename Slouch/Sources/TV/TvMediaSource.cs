@@ -11,31 +11,70 @@ namespace Slouch
         // ===========================================================================
         // = IMediaSource Implementation
         // ===========================================================================
-        
+
+        private IEnumerable<TvEpisode> GetAll()
+        {
+            var episodeKeys = Cabinet.GetSubkeys<TvEpisode>(true);
+
+            foreach (var episodeKey in episodeKeys)
+                yield return Cabinet.GetAsync<TvEpisode>(episodeKey).Result;
+        }
+
+        public IEnumerable<IMediaItem> GetJustArrived()
+        {
+            return GetAll()
+                .OrderByDescending(X => X.LibraryAddedDate)
+                .Take(20);
+        }
+
         public IEnumerable<IMediaItem> GetDueItems()
         {
-            var episode = new TvEpisode
-            {
-                Number = 1,
+            return GetAll()
+                .Where(X => X.IsDue);
 
-                Season = new TvSeason
-                {
-                    Number = 1,
+            //TvEpisode episode;
 
-                    Series = new TvSeries
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "House of Cards"
-                    }
-                }
-            };
+            //if (!data.Exists<TvSeries>(seriesId))
+            //{
+            //    var series = new TvSeries
+            //    {
+            //        Id = seriesId,
+            //        Name = "House of Cards"
+            //    };
 
-            yield return new TvMediaItem(episode);
+            //    await data.SetAsync(series, series.Id);
+
+            //    var season = new TvSeason
+            //    {
+            //        SeriesId = series.Id,
+            //        Number = 1
+            //    };
+
+            //    await data.SetAsync(season, series.Id, season.Number);
+
+            //    episode = new TvEpisode
+            //    {
+            //        AirDate = DateTime.Now.Date,
+            //        Number = 1,
+            //        SeasonNumber = 1,
+            //        SeriesId = series.Id,
+            //        Title = "Uh oh..."
+            //    };
+
+            //    await data.SetAsync(episode, series.Id, season.Number, episode.Number);
+            //}
+            //else
+            //    episode = await data.GetAsync<TvEpisode>(seriesId, 1, 1);
+
+            //yield return new TvMediaItem(episode);
         }
 
         public void ChangeStatus(IMediaItem inItem, MediaStatus inStatus)
         {
-            throw new NotImplementedException();
+            var item = (TvEpisode)inItem;
+            item.Status = inStatus;
+
+            Cabinet.SetAsync(item).Wait();
         }
     }
 }

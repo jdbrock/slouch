@@ -11,7 +11,7 @@ namespace Slouch
         // = Public Properties
         // ===========================================================================
         
-        public TvSeries Series { get; set; }
+        public Guid SeriesId { get; set; }
         public Int32 Number { get; set; }
     }
 }

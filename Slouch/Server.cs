@@ -58,6 +58,8 @@ namespace Slouch
         {
             LoadSettings();
 
+            Cabinet.Initialise(GetCabinetPath());
+
             _downloader = new GrouchDownloader(_settings);
 
             _sources = new List<IMediaSource>
@@ -162,6 +164,8 @@ namespace Slouch
                         QueueForDownload(best);
 
                         Console.WriteLine("Added to download queue.");
+
+                        source.ChangeStatus(item, MediaStatus.Incoming);
                     }
 
                 // Post-process.
@@ -184,15 +188,28 @@ namespace Slouch
             _downloadQueue.Enqueue(inResult);
         }
 
-        private String GetSettingsPath()
+        private String GetBasePath()
         {
-            var appDataPath  = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            var slouchPath   = Path.Combine(appDataPath, "Slouch");
-            var settingsPath = Path.Combine(slouchPath, "settings.json");
+            var appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+            var slouchPath = Path.Combine(appDataPath, "Slouch");
 
             Directory.CreateDirectory(slouchPath);
 
-            return settingsPath;
+            return slouchPath;
+        }
+
+        private String GetSettingsPath()
+        {
+            return Path.Combine(GetBasePath(), "settings.json");
+        }
+
+        private String GetCabinetPath()
+        {
+            var cabinetPath = Path.Combine(GetBasePath(), "Data");
+
+            Directory.CreateDirectory(cabinetPath);
+
+            return cabinetPath;
         }
 
         private void LoadSettings()

@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="fastjson">
+      <HintPath>..\packages\fastJSON.2.1.1.0\lib\net40\fastjson.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.1.2.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
@@ -101,6 +104,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Cabinet.cs" />
+    <Compile Include="Database\CabinetKeyAttribute.cs" />
     <Compile Include="Downloaders\Grouch\GrouchDownloader.cs" />
     <Compile Include="Downloaders\Grouch\GrouchInternalDecoder.cs" />
     <Compile Include="Downloaders\Grouch\GrouchInternalFile.cs" />
@@ -129,7 +134,6 @@
     <Compile Include="Sources\Movies\MovieMediaItem.cs" />
     <Compile Include="Sources\Movies\MovieMediaSource.cs" />
     <Compile Include="Sources\TV\TvEpisode.cs" />
-    <Compile Include="Sources\TV\TvMediaItem.cs" />
     <Compile Include="Sources\TV\TvMediaSource.cs" />
     <Compile Include="Sources\TV\TvSeason.cs" />
     <Compile Include="Sources\TV\TvSeries.cs" />

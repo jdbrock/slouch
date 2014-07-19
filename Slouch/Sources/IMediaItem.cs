@@ -9,5 +9,13 @@ namespace Slouch
     public interface IMediaItem
     {
         String DisplayName { get; }
+
+        Guid? LibraryId { get; }
+        String LibraryFilePath { get; }
+        DateTime? LibraryAddedDate { get; }
+
+        MediaStatus Status { get; }
+
+        Boolean IsDue { get; }
     }
 }
